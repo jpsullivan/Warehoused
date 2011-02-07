@@ -1,0 +1,79 @@
+.inputImageButton {
+	background-color: #F0F0F0;
+	border: 1px dotted #999999;
+	padding: 0px;
+}
+
+.inputButton {
+	background-color: #F0F0F0;
+	border: 1px dotted #999999;
+	padding: 2px;
+	font-family: arial, helvetica, sans-serif;
+	font-weight: bold;
+	font-size: 10pt;
+}
+
+.inputText {
+	background-color: #F0F0F0;
+	border: 1px dotted #999999;
+	font-family: arial, helvetica, sans-serif;
+	font-weight: bold;
+	font-size: 10pt;
+	padding: 2px;
+	height: 24px;
+}
+
+.inputReport {
+	overflow: auto;
+}
+  
+.inputSelect {
+	background-color: #F0F0F0;
+	font-family: arial, helvetica, sans-serif;
+	font-size: 10pt;
+	font-weight: bold;
+}
+
+a {
+	text-decoration: none;
+	color: #000000;
+}
+
+.noborder {
+	border: 0px;
+}
+
+td, th {
+	font-family: verdana;
+	font-size: 10pt;
+}
+
+h {
+	font-family: verdana;
+}
+
+.editOff {
+	background-color: transparent;
+	border: 0px;
+	overflow: hidden;
+}
+
+.whitebg {
+	background-color: #ffffff;
+}
+
+
+input, textarea {
+	text-align: center;
+}
+
+.oldtextareaselect {
+	border: 1px solid #000000; 
+	font-family: verdana, helvetica, sans-serif; 
+	font-size: 10pt;
+	overflow: auto;
+}
+
+.nomargin {
+	margin: 0;
+}

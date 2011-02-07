@@ -1,0 +1,143 @@
+<?php
+
+$index = $_REQUEST["index"];
+$sheet = $_REQUEST["sheet"];
+$pic = $_REQUEST["pic"];
+
+$picDisplay = "";
+$int_max_images = 7;
+
+//Delete Pictures
+
+if(isset($pic)) {
+	$delPic = "../resources/$index/" . $pic . "t.jpg";
+	unlink($delPic);
+	$delPic = "../resources/$index/" . $pic . "f.jpg";
+	unlink($delPic);
+}
+
+// Upload Pictures
+
+if(!empty($_FILES)) {
+	$i = 1;
+
+	$uploaddir = "../resources/$index/";
+
+	if (!is_dir($uploaddir)) {
+		mkdir($uploaddir);
+	}
+
+	$error = "All picture slots are filled.	You must delete a picture before uploading a new one";
+
+	$uploadfile = "";
+
+	while($i < $int_max_images) {
+		$uploadfile = $uploaddir . $i . 't.jpg';
+
+		if(!file_exists($uploadfile)) {
+			$error = "";
+			break;
+		}
+
+		$i++;
+	}
+
+	if($error == "") {
+		$uploadedfile = $_FILES['picUpload']['tmp_name'];
+		$src = imagecreatefromjpeg($uploadedfile);
+		list($width, $height) = getimagesize($uploadedfile);
+
+		$fullsize = $uploaddir . $i . 'f.jpg';
+		$newwidth = 800;
+		$newheight = 600;
+		$tmp = imagecreatetruecolor($newwidth, $newheight);
+		imagecopyresampled($tmp, $src, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
+		imagejpeg($tmp, $fullsize, 100);
+		//imagedestroy($src);
+		imagedestroy($tmp);
+
+		$thumbnail = $uploaddir . $i . 't.jpg';
+		$newwidth = 167;
+		$newheight = 125;
+		$tmp = imagecreatetruecolor($newwidth, $newheight);
+		imagecopyresampled($tmp, $src, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
+		imagejpeg($tmp, $thumbnail, 100);
+		imagedestroy($tmp);
+
+		imagedestroy($src);
+
+		/*
+			$error = "An error occurred when trying to upload the specified file.";
+			print_r($_FILES);
+		*/
+	}
+}
+
+//Display Pictures
+
+for($i = 1; $i <= 6; $i++) {
+	$filepath = "../resources/$index/";
+	$fileThumbnail = $filepath . $i . 't.jpg';
+	$fileFullsize = $filepath . $i . 'f.jpg';
+	
+	if(file_exists($fileThumbnail)) {
+		$picDisplay .= "
+			<td align='center'>
+				<a href='$fileFullsize'><img src='$fileThumbnail' width='167' height='125' border='0'></a>
+				<br>
+				<b>$picNum <a href='pic_edit.php?index=$index&sheet=$sheet&pic=$i'><font color='red'>[Delete]</b></font></a>			
+			</td>\n
+		";
+	} else {
+		$picDisplay .= "
+			<td align='center'>
+				<img src='../images/nopic.jpg' width='167' height='125' border='0'>
+				<br>
+				<b>$picNum <font color='red'>[Delete]</b></font>
+			</td>		
+		";
+	}
+}
+
+?>
+
+<html>
+	<head>
+		<title>Manage Pictures</title>
+		<link href="styles/inv_style.css" rel="stylesheet" type="text/css">
+	</head>
+	<body>
+		<form enctype="multipart/form-data" action="pic_edit.php" method="post">
+			<input type="hidden" name="index" value="<? echo $index; ?>">
+			<input type="hidden" name="sheet" value="<? echo $sheet; ?>">
+			<table align="center">
+				<tr>
+					<td colspan="9" align="center"><h2>Edit Pictures</h2></td>
+				</tr>
+				<tr>
+					<td colspan="8"><input type="file" name="picUpload" size="40"></td>
+					<td><input type="submit" value="Upload"></td>
+				</tr>
+				<tr>
+					<td colspan="9">&nbsp;</td>
+				</tr>
+				<tr>
+					<table align="center">
+						<tr>
+							<?php echo $picDisplay; ?>
+						</tr>
+					</table>
+				</tr>
+				<tr>
+					<td colspan="9">&nbsp;</td>
+				</tr>
+				<tr>
+					<td  align="center"><h3><a href="inv_edit.php?searchField=index&search=<? echo $index; ?>&sheet=<? echo $sheet; ?>">Back to Record</a></h3></td>
+				</tr>
+			
+			</table>
+		</form>
+	</body>
+</html>
+
+<script type="text/html">
